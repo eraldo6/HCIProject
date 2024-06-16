@@ -5,15 +5,20 @@ using UnityEngine.SceneManagement;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-    public void GoToSceneTwo(){
+    public void GoToSceneTwo() {
         SceneManager.LoadScene("NewScene2");
     }
 
-    public void GoToSceneThree(){
+    public void GoToSceneThree() {
         SceneManager.LoadScene("RotationScene");
     }
 
-    public void GoToSceneOne(){
+    public void GoToSceneOne() {
         SceneManager.LoadScene("SampleScene");
+    }
+
+    public void GoToSceneFour()
+    {
+        SceneManager.LoadScene("MoveObjectScene");
     }
 }
