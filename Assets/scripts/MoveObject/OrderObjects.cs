@@ -21,14 +21,28 @@ public class OrderObjects : MonoBehaviour
     public int totalIterations = 4; // Total number of iterations
     private int currentIteration = 0; // Current iteration count
 
+    private List<ColorObject> initialObjectsState; // To store initial state
+
     // Start is called before the first frame update
     void Start()
     {
+        initialObjectsState = new List<ColorObject>();
+
         foreach (var obj in objectsToSort)
         {
             obj.originalPosition = obj.gameObject.transform.position;
             obj.originalColor = obj.color;
+
+            // Store the initial state
+            initialObjectsState.Add(new ColorObject
+            {
+                gameObject = obj.gameObject,
+                color = obj.color,
+                originalPosition = obj.originalPosition,
+                originalColor = obj.originalColor
+            });
         }
+
         gameObject.SetActive(true);
         // Start the sorting process with initial delay and animation
         StartCoroutine(DelayedStart());
@@ -63,6 +77,7 @@ public class OrderObjects : MonoBehaviour
                 {
                     if (CompareColors(objectsToSort[j].color, objectsToSort[j + 1].color) < 0)
                     {
+                        Debug.Log("object: " + objectsToSort[j].gameObject + " , object color:" + objectsToSort[j].color);
                         // Swap the objects in the list
                         var temp = objectsToSort[j];
                         objectsToSort[j] = objectsToSort[j + 1];
@@ -95,17 +110,23 @@ public class OrderObjects : MonoBehaviour
 
             if (currentIteration < totalIterations)
             {
-                // Reset objects to their original positions and colors without animation
                 foreach (var obj in objectsToSort)
                 {
                     obj.gameObject.transform.position = obj.originalPosition;
-                    obj.color = obj.originalColor;
-                    // Update the object's renderer with the original color
-                    var renderer = obj.gameObject.GetComponent<MeshRenderer>();
-                    if (renderer != null)
+                }
+
+                // Ensure the sorting list is reset to the initial state
+                objectsToSort.Clear();
+                foreach (var initialObj in initialObjectsState)
+                {
+                    objectsToSort.Add(new ColorObject
                     {
-                        renderer.material.color = obj.originalColor;
-                    }
+                        gameObject = initialObj.gameObject,
+                        color = initialObj.originalColor,
+                        originalPosition = initialObj.originalPosition,
+                        originalColor = initialObj.originalColor
+                    });
+
                 }
 
                 // Wait for a couple of seconds before the next iteration
